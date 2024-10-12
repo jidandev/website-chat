@@ -149,7 +149,7 @@ const App = () => {
             <h2 className="text-2xl font-bold mb-4">Chat Room</h2>
             <div className="mb-4 overflow-y-auto h-64 border rounded p-4 bg-gray-50">
               {messages.map((msg, index) => (
-                <div key={index} className="mb-2">{msg.username}: {msg.text}</div>
+                <div key={index} className="mb-2">{msg.username} {msg.username == "Jidan" ? <span className="text-blue-600">Admin</span> : ""}: {msg.text}</div>
               ))}
             </div>
             <input
