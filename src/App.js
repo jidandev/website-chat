@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import io from 'socket.io-client';
 import './index.css';
@@ -9,11 +10,16 @@ const App = () => {
   const [messages, setMessages] = useState([]);
 
   useEffect(() => {
+    socket.on('receiveMessages', (messages) => {
+      setMessages(messages);
+    });
+
     socket.on('receiveMessage', (message) => {
       setMessages((prevMessages) => [...prevMessages, message]);
     });
 
     return () => {
+      socket.off('receiveMessages');
       socket.off('receiveMessage');
     };
   }, []);
@@ -29,7 +35,7 @@ const App = () => {
         <h2 className="text-2xl font-bold mb-4">Real-Time Chat</h2>
         <div className="mb-4 overflow-y-auto h-64 border rounded p-4 bg-gray-50">
           {messages.map((msg, index) => (
-            <div key={index} className="mb-2">{msg}</div>
+            <div key={index} className="mb-2">{msg.content}</div>
           ))}
         </div>
         <input
