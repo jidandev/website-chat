@@ -43,7 +43,7 @@ const App = () => {
       console.log(response.data);
       setAction('login'); // After registering, switch to login
     } catch (error) {
-      console.error('Registration error:', error);
+      console.error('Registration error:', error.response.data); // Tampilkan pesan error
     }
   };
 
@@ -57,7 +57,7 @@ const App = () => {
       // Store JWT in local storage if needed
       localStorage.setItem('token', response.data.token);
     } catch (error) {
-      console.error('Login error:', error);
+      console.error('Login error:', error.response.data); // Tampilkan pesan error
     }
   };
 
@@ -159,4 +159,4 @@ const App = () => {
 };
 
 export default App;
-                                                 
+    
