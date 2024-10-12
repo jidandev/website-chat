@@ -109,7 +109,7 @@ const App = () => {
           </div>
         )}
 
-        {action === 'login' && (
+        {action === 'login' && !token && (
           <div className="mb-4">
             <input
               type="text"
