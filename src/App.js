@@ -11,6 +11,7 @@ const App = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [action, setAction] = useState('login'); // 'login' or 'register'
+  const [token, setToken] = useState(null); // Token untuk otentikasi
 
   useEffect(() => {
     socket.on('receiveMessages', (messages) => {
@@ -28,8 +29,9 @@ const App = () => {
   }, []);
 
   const sendMessage = () => {
-    if (username && message) {
-      socket.emit('sendMessage', { username, text: message });
+    if (token && message) { // Pastikan user sudah login
+      const userMessage = { username, text: message };
+      socket.emit('sendMessage', userMessage);
       setMessage('');
     }
   };
@@ -41,9 +43,11 @@ const App = () => {
         password,
       });
       console.log(response.data);
+      alert('Registration successful! Please log in.'); // Pesan sukses
       setAction('login'); // After registering, switch to login
     } catch (error) {
-      console.error('Registration error:', error.response.data); // Tampilkan pesan error
+      alert(error.response.data); // Tampilkan pesan error
+      console.error('Registration error:', error.response.data); // Tampilkan pesan error di konsol
     }
   };
 
@@ -54,10 +58,11 @@ const App = () => {
         password,
       });
       console.log(response.data);
-      // Store JWT in local storage if needed
-      localStorage.setItem('token', response.data.token);
+      setToken(response.data.token); // Simpan token
+      alert('Login successful!'); // Pesan sukses
     } catch (error) {
-      console.error('Login error:', error.response.data); // Tampilkan pesan error
+      alert(error.response.data); // Tampilkan pesan error
+      console.error('Login error:', error.response.data); // Tampilkan pesan error di konsol
     }
   };
 
@@ -130,7 +135,7 @@ const App = () => {
           </div>
         )}
 
-        {action === 'login' && (
+        {action === 'login' && token && ( // Cek apakah sudah login
           <div>
             <h2 className="text-2xl font-bold mb-4">Chat Room</h2>
             <div className="mb-4 overflow-y-auto h-64 border rounded p-4 bg-gray-50">
@@ -142,18 +147,24 @@ const App = () => {
               type="text"
               value={message}
               onChange={(e) => setMessage(e.target.value)}
-              className="w-full border rounded p-2 mb-4"
-              placeholder="Type a message..."
+              className="w-full border rounded p-2 mb-2"
+              placeholder="Type your message..."
             />
             <button
               onClick={sendMessage}
-              className="w-full bg-blue-500 text-white p-2 rounded"
+              className="w-full bg-green-500 text-white p-2 rounded"
             >
               Send
             </button>
           </div>
         )}
       </div>
+    </div>
+  );
+};
+
+export default App;
+                </div>
     </div>
   );
 };
