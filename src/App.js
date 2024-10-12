@@ -14,6 +14,7 @@ const App = () => {
   const [token, setToken] = useState(null); // Token untuk otentikasi
 
   useEffect(() => {
+    // Menerima pesan ketika komponen terpasang
     socket.on('receiveMessages', (messages) => {
       setMessages(messages);
     });
@@ -23,6 +24,7 @@ const App = () => {
     });
 
     return () => {
+      // Membersihkan listener saat komponen tidak lagi terpasang
       socket.off('receiveMessages');
       socket.off('receiveMessage');
     };
@@ -33,6 +35,8 @@ const App = () => {
       const userMessage = { username, text: message };
       socket.emit('sendMessage', userMessage);
       setMessage('');
+    } else {
+      alert('You need to be logged in to send messages!'); // Pesan jika user tidak login
     }
   };
 
@@ -44,7 +48,7 @@ const App = () => {
       });
       console.log(response.data);
       alert('Registration successful! Please log in.'); // Pesan sukses
-      setAction('login'); // After registering, switch to login
+      setAction('login'); // Setelah registrasi, beralih ke login
     } catch (error) {
       alert(error.response.data); // Tampilkan pesan error
       console.error('Registration error:', error.response.data); // Tampilkan pesan error di konsol
@@ -79,6 +83,7 @@ const App = () => {
               onChange={(e) => setUsername(e.target.value)}
               className="w-full border rounded p-2 mb-2"
               placeholder="Username"
+              required
             />
             <input
               type="password"
@@ -86,6 +91,7 @@ const App = () => {
               onChange={(e) => setPassword(e.target.value)}
               className="w-full border rounded p-2 mb-4"
               placeholder="Password"
+              required
             />
             <button
               onClick={handleRegister}
@@ -111,6 +117,7 @@ const App = () => {
               onChange={(e) => setUsername(e.target.value)}
               className="w-full border rounded p-2 mb-2"
               placeholder="Username"
+              required
             />
             <input
               type="password"
@@ -118,6 +125,7 @@ const App = () => {
               onChange={(e) => setPassword(e.target.value)}
               className="w-full border rounded p-2 mb-4"
               placeholder="Password"
+              required
             />
             <button
               onClick={handleLogin}
@@ -164,10 +172,4 @@ const App = () => {
 };
 
 export default App;
-                </div>
-    </div>
-  );
-};
-
-export default App;
-    
+                
