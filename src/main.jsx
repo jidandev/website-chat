@@ -7,7 +7,7 @@ import ChatPage from './Pages/ChatPage'
 
 const router = createBrowserRouter([
   {
-    path: '/p',
+    path: '/',
     element: <ChatPage />,
     errorElement: <ErrorPage />
   },
