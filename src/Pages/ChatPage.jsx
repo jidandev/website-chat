@@ -115,10 +115,10 @@ const ChatPage = () => {
 
 
   return (
-    <div className="min-h-screen flex bg-gray-100">
-      <div>
+    <div className="min-h-screen flex flex-col bg-gray-100">
+      <div className='flex'>
       <Button onClick={() => {localStorage.removeItem('token'); localStorage.removeItem('username'); localStorage.removeItem('password'); navigate('/login')}} classname='m-3 bg-black'>Logout</Button>
-      <h1 className='inline-block font-bold'>{username}</h1>
+      <h1 className='mt-5 font-bold'>{username}</h1>
       </div>
       <div className="bg-white p-6 rounded-md shadow-md w-full max-w-md m-auto">
           <div>
