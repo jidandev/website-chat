@@ -18,7 +18,7 @@ const FormLogin = () => {
           console.log(response.data);
           localStorage.setItem('token', response.data.token);
           //setToken(response.data.token); // Simpan token
-          alert('Login successful!'); // Pesan sukses
+         // alert('Login successful!'); // Pesan sukses
           window.location.href = '/';
         } catch (error) {
           alert(error.response.data); // Tampilkan pesan error
