@@ -30,7 +30,7 @@ const FormLogin = () => {
         <form onSubmit={handleLogin}>
             <InputForm type="text" name="username" label="Username" placeholder="Your Name" />
             <InputForm type="password" name="password" label="Password" placeholder="*****" />
-            <Button classname="bg-black w-full" type="submit">Login</Button>
+            <Button classname="bg-gray-900 w-full" type="submit">Login</Button>
           </form>
     )
 }

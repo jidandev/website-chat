@@ -43,7 +43,7 @@ const FormRegister = () => {
             <InputForm type="text" name="username" label="Username" placeholder="Your Name" />
             <InputForm type="password" name="password" label="Password" placeholder="*****" />
             <InputForm type="password" name="confirmpassword" label="Confirm Password" placeholder="*****" />
-            <Button classname="bg-black w-full" type="submit">Register</Button>
+            <Button classname="bg-gray-900 w-full" type="submit">Register</Button>
           </form>
     )
 }

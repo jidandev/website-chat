@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import io from 'socket.io-client';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Button from '../components/Elements/Button';
 
 const socket = io('https://violet-grass-drug.glitch.me/');
@@ -116,30 +116,32 @@ const ChatPage = () => {
 
 
   return (
-    <div className="min-h-screen flex flex-col bg-gray-100">
-      <div className='flex'>
-      <Button onClick={() => {localStorage.removeItem('token'); localStorage.removeItem('username'); localStorage.removeItem('password'); navigate('/login')}} classname='m-3 bg-black'>Logout</Button>
-      <h1 className='mt-5 font-bold'>{username}</h1>
+    <div className="min-h-screen flex flex-col bg-gray-900">
+      <div className='flex border-b-[1px] border-b-gray-700 fixed w-full bg-gray-900 z-10'>
+      <Link onClick={() => {localStorage.removeItem('token'); localStorage.removeItem('username'); localStorage.removeItem('password'); navigate('/login')}} className='text-slate-400 text-4xl mx-2 mt-1'><ion-icon name="arrow-back-outline"></ion-icon></Link>
+      <h1 className='mt-2 font-bold text-slate-200 text-xl'>{username}</h1>
       </div>
-      <div className="bg-white p-6 rounded-md shadow-md w-full max-w-md m-auto">
-          <div>
-            <h2 className="text-2xl font-bold mb-4">Chat Room</h2>
-            <div className="mb-4 overflow-y-auto h-64 border rounded p-4 bg-gray-50">
+      <div className="mt-12 ml-3 overflow-y-auto h-full text-white mb-16">
               {messages.map((msg, index) => (
-                <div key={index} className="mb-2">{msg.username} {admins.includes(msg.username) ? <span className=' text-blue-600'><ion-icon name="checkmark-circle"></ion-icon></span>: ""}: {msg.text}</div>
+                <div key={index} className='mt-4'>
+                  <img className='rounded-full bg-white w-8 h-8 float-left mt-0 mr-2 ' src='/vite.svg'></img>
+                  <h1 className='mt-2 font-bold text-slate-200 text-xl'>{msg.username} {admins.includes(msg.username) ? <span className=' text-blue-600'><ion-icon name="checkmark-circle"></ion-icon></span>: ""}</h1>
+                  <pre className='break-words -mt-1  text-slate-300 text-xl text-left ml-10 whitespace-pre-wrap font-sans'>{msg.text}</pre>
+                </div>
               ))}
-            </div>
-            <input
-              type="text"
-              value={message}
-              onChange={(e) => setMessage(e.target.value)}
-              className="w-full border rounded p-2 mb-2"
-              placeholder="Type your message..."
-            />
-            <Button classname='w-full bg-black' onClick={() => sendMessage()}>Send</Button>
-          </div>
-      
       </div>
+      <div className='flex fixed bottom-0 items-center justify-center bg-gray-900 w-full h-16 z-10 '>
+        <textarea
+            type="text"
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+            className="bg-gray-700 border-0 w-64 h-10 md:h-12 sm:w-1/2 rounded-lg p-3 text-white"
+            placeholder="Type your message..."
+        />
+        <button onClick={() => sendMessage()} className='rounded-full bg-blue-600 w-9 h-9 md:w-10 md:h-10 ml-2 text-white text-xl px-[0.6rem] md:px-[0.7rem] py-2' src='/vite.svg'>
+          <ion-icon name="send"></ion-icon>
+        </button>
+      </div>  
     </div>
   );
 };
