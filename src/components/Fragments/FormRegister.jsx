@@ -11,6 +11,14 @@ const FormRegister = () => {
         let username = e.target.username.value;
         let password = e.target.password.value;
         let confirmpassword = e.target.confirmpassword.value;
+        let terlarang = ["Kontol", "Memek", "Halo", "Dick", "Pussy", "test", "tes"];
+
+        for (let word of terlarang) {
+          if (username.toLowerCase().includes(word.toLowerCase())) {
+            alert('Nama terdapat kata terlarang');
+            return false;
+          }
+        }
         if(password !== confirmpassword) {
             alert('Confirm password tidak sama dengan password');
             return false;

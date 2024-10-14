@@ -104,7 +104,8 @@ const ChatPage = () => {
   }, []);
 
   const sendMessage = () => {
-    if ( message) { // Pastikan user sudah login
+    if ( message) {
+
       const userMessage = { username, text: message };
       socket.emit('sendMessage', userMessage);
       setMessage('');

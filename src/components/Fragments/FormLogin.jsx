@@ -24,7 +24,7 @@ const FormLogin = () => {
           alert(error.response.data); // Tampilkan pesan error
           console.error('Login error:', error.response.data); // Tampilkan pesan error di konsol
         }
-      };
+      };  
 
     return (
         <form onSubmit={handleLogin}>
