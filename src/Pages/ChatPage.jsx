@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import io from 'socket.io-client';
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
@@ -128,6 +128,26 @@ const ChatPage = () => {
     }
   };
 
+  const endOfMessagesRef = useRef(null);
+
+  // // Fungsi untuk melakukan scroll ke elemen terakhir
+  // const scrollToBottom = () => {
+  //   endOfMessagesRef.current?.scrollIntoView({ behavior: 'smooth' });
+  // };
+
+  // // Gunakan useEffect untuk scroll saat komponen dirender atau messages berubah
+  // useEffect(() => {
+  //   scrollToBottom();
+  // }, []);
+
+  useEffect(() => {
+    setTimeout(() => {
+      window.scrollTo({
+        top: document.body.scrollHeight,
+        behavior: 'smooth' // Scroll dengan animasi halus
+      });
+    }, 2000); // Delay untuk memastikan elemen sudah ter-render
+  }, []);
 
   return (
     <div className="min-h-screen flex flex-col bg-gray-900">
@@ -139,7 +159,7 @@ const ChatPage = () => {
               {messages.map((msg, index) => (
                 <div key={index} className='mt-4'>
                   <img className='rounded-full bg-white w-8 h-8 float-left mt-0 mr-2 ' src='/vite.svg'></img>
-                  <h1 className='mt-2 font-medium text-slate-200 text-md md:font-bold md:text-xl'>{msg.username} {admins.includes(msg.username) ? <span className=' text-blue-600'><ion-icon name="checkmark-circle"></ion-icon></span>: ""}</h1>
+                  <h1 ref={endOfMessagesRef} className='mt-2 font-medium text-slate-200 text-md md:font-bold md:text-xl'>{msg.username} {admins.includes(msg.username) ? <span className=' text-blue-600'><ion-icon name="checkmark-circle"></ion-icon></span>: ""}</h1>
                   <pre className='break-words -mt-1  text-slate-300 text-md md:text-xl text-left ml-10 whitespace-pre-wrap font-sans'>{msg.text}</pre>
                 </div>
               ))}
