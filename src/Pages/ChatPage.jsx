@@ -3,6 +3,7 @@ import io from 'socket.io-client';
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
 import Button from '../components/Elements/Button';
+const MAX_MESSAGE_LENGTH = 500; // Maksimal panjang pesan
 
 const socket = io('https://violet-grass-drug.glitch.me/');
 
@@ -10,7 +11,10 @@ const ChatPage = () => {
   const navigate = useNavigate();
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState([]);
-  const [username, setUsername] = useState(localStorage.getItem('username') || '');
+  const [username, setUsername] = useState('');
+  // Regular expression diperbarui untuk mendukung huruf, angka, tanda baca, dan simbol ilmiah/matematika
+  const allowedCharsRegex = "";
+  
   //const [password, setPassword] = useState(localStorage.getItem('password') || '');
   //const [action, setAction] = useState('login'); // 'login' or 'register'
   //const [token, setToken] = useState(localStorage.getItem('token') || null); // Token untuk otentikasi
@@ -42,7 +46,7 @@ const ChatPage = () => {
             Authorization: token, // Menyertakan token dalam header
           },
         });
-        setTier(response.data.tier);
+        setUsername(response.data.username);
         
         
       } catch (error) {
@@ -52,7 +56,7 @@ const ChatPage = () => {
 
     fetchUserData();
   }, [token]);
-  //console.log(tierUser)
+  //console.log(username)
 
   useEffect(() => {
     const checkToken = async () => {
@@ -105,7 +109,22 @@ const ChatPage = () => {
 
   const sendMessage = () => {
     if ( message) {
-
+      if (message.length > MAX_MESSAGE_LENGTH) {
+        alert("Pesan terlalu panjang!");
+        return false;
+      }
+  
+      if (!allowedCharsRegex.test(message)) {
+        alert("Pesan mengandung karakter tidak valid!");
+        return false;
+      }
+  
+      // Memeriksa pengulangan karakter berlebihan
+      const repeatedCharRegex = /(.)\1{9,}/;
+      if (repeatedCharRegex.test(message)) {
+        alert("Pesan mengandung pengulangan karakter yang berlebihan!");
+        return false;
+      }
       const userMessage = { username, text: message };
       socket.emit('sendMessage', userMessage);
       setMessage('');
@@ -118,7 +137,7 @@ const ChatPage = () => {
   return (
     <div className="min-h-screen flex flex-col bg-gray-900">
       <div className='flex border-b-[1px] border-b-gray-700 fixed w-full bg-gray-900 z-10'>
-      <Link onClick={() => {localStorage.removeItem('token'); localStorage.removeItem('username'); localStorage.removeItem('password'); navigate('/login')}} className='text-slate-400 text-4xl mx-2 mt-1'><ion-icon name="arrow-back-outline"></ion-icon></Link>
+      <Link onClick={() => {localStorage.removeItem('token');  localStorage.removeItem('password'); navigate('/login')}} className='text-slate-400 text-4xl mx-2 mt-1'><ion-icon name="arrow-back-outline"></ion-icon></Link>
       <h1 className='mt-2 font-bold text-slate-200 text-xl'>{username}</h1>
       </div>
       <div className="mt-12 ml-3 overflow-y-auto h-full text-white mb-16">
