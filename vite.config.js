@@ -9,9 +9,9 @@ export default defineConfig({
       registerType: 'autoUpdate',
       manifest: {
         name: 'ChatVersal',
-        short_name: 'ChatVers',
+        short_name: 'ChatVersal',
         description: 'A simple real time chat',
-        theme_color: '#ffffff',
+        theme_color: '#1c1d22',
         icons: [
           {
             src: '/vite.svg',
