@@ -139,8 +139,8 @@ const ChatPage = () => {
               {messages.map((msg, index) => (
                 <div key={index} className='mt-4'>
                   <img className='rounded-full bg-white w-8 h-8 float-left mt-0 mr-2 ' src='/vite.svg'></img>
-                  <h1 className='mt-2 font-bold text-slate-200 text-xl'>{msg.username} {admins.includes(msg.username) ? <span className=' text-blue-600'><ion-icon name="checkmark-circle"></ion-icon></span>: ""}</h1>
-                  <pre className='break-words -mt-1  text-slate-300 text-xl text-left ml-10 whitespace-pre-wrap font-sans'>{msg.text}</pre>
+                  <h1 className='mt-2 font-medium text-slate-200 text-md md:font-bold md:text-xl'>{msg.username} {admins.includes(msg.username) ? <span className=' text-blue-600'><ion-icon name="checkmark-circle"></ion-icon></span>: ""}</h1>
+                  <pre className='break-words -mt-1  text-slate-300 text-md md:text-xl text-left ml-10 whitespace-pre-wrap font-sans'>{msg.text}</pre>
                 </div>
               ))}
       </div>
