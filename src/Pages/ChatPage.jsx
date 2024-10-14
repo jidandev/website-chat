@@ -13,7 +13,7 @@ const ChatPage = () => {
   const [messages, setMessages] = useState([]);
   const [username, setUsername] = useState('');
   // Regular expression diperbarui untuk mendukung huruf, angka, tanda baca, dan simbol ilmiah/matematika
-  const allowedCharsRegex = "";
+  const allowedCharsRegex = /^[a-zA-Z0-9\s.,?!∞μΩπΣΦΨ±÷×√∑∫∂∆∇≠≤≥⌂€$£¥]+$/;
   
   //const [password, setPassword] = useState(localStorage.getItem('password') || '');
   //const [action, setAction] = useState('login'); // 'login' or 'register'
