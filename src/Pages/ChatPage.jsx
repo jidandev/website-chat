@@ -12,14 +12,14 @@ const ChatPage = () => {
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState([]);
   const [username, setUsername] = useState('');
-  // Regular expression diperbarui untuk mendukung huruf, angka, tanda baca, dan simbol ilmiah/matematika
-  const allowedCharsRegex = /^[a-zA-Z0-9\s.,?!∞μΩπΣΦΨ±÷×√∑∫∂∆∇≠≤≥⌂€$£¥]+$/;
+
+
   
   //const [password, setPassword] = useState(localStorage.getItem('password') || '');
   //const [action, setAction] = useState('login'); // 'login' or 'register'
   //const [token, setToken] = useState(localStorage.getItem('token') || null); // Token untuk otentikasi
   localStorage.setItem('password', '');
-  const [tierUser, setTier] = useState(0);
+
   const token = localStorage.getItem('token'); // Mengambil token dari localStorage
 
   const [admins, setAdmins] = useState([]);
@@ -111,11 +111,6 @@ const ChatPage = () => {
     if ( message) {
       if (message.length > MAX_MESSAGE_LENGTH) {
         alert("Pesan terlalu panjang!");
-        return false;
-      }
-  
-      if (!allowedCharsRegex.test(message)) {
-        alert("Pesan mengandung karakter tidak valid!");
         return false;
       }
   
