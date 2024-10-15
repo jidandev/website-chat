@@ -128,27 +128,16 @@ const ChatPage = () => {
     }
   };
 
-  const endOfMessagesRef = useRef(null);
+  const endMessageRef = useRef(null);
 
-  // // Fungsi untuk melakukan scroll ke elemen terakhir
-  // const scrollToBottom = () => {
-  //   endOfMessagesRef.current?.scrollIntoView({ behavior: 'smooth' });
-  // };
-
-  // // Gunakan useEffect untuk scroll saat komponen dirender atau messages berubah
-  // useEffect(() => {
-  //   scrollToBottom();
-  // }, []);
+  const scrollToBottom = () => {
+    endMessageRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
 
   useEffect(() => {
-    setTimeout(() => {
-      window.scrollTo({
-        top: document.body.scrollHeight,
-        behavior: 'smooth' // Scroll dengan animasi halus
-      });
-    }, 2000); // Delay untuk memastikan elemen sudah ter-render
-  }, []);
-
+    // Scroll ke bawah saat pertama kali halaman di-load
+    scrollToBottom();
+  }, [messages]);
   return (
     <div className="min-h-screen flex flex-col bg-gray-900">
       <div className='flex border-b-[1px] border-b-gray-700 fixed w-full bg-gray-900 z-10'>
@@ -159,10 +148,11 @@ const ChatPage = () => {
               {messages.map((msg, index) => (
                 <div key={index} className='mt-4'>
                   <img className='rounded-full bg-white w-8 h-8 float-left mt-0 mr-2 ' src='/vite.svg'></img>
-                  <h1 ref={endOfMessagesRef} className='mt-2 font-medium text-slate-200 text-md md:font-bold md:text-xl'>{msg.username} {admins.includes(msg.username) ? <span className=' text-blue-600'><ion-icon name="checkmark-circle"></ion-icon></span>: ""}</h1>
+                  <h1 className='mt-2 font-medium text-slate-200 text-md md:font-bold md:text-xl'>{msg.username} {admins.includes(msg.username) ? <span className=' text-blue-600'><ion-icon name="checkmark-circle"></ion-icon></span>: ""}</h1>
                   <pre className='break-words -mt-1  text-slate-300 text-md md:text-xl text-left ml-10 whitespace-pre-wrap font-sans'>{msg.text}</pre>
                 </div>
               ))}
+              <div ref={endMessageRef}></div>
       </div>
       <div className='flex fixed bottom-0 items-center justify-center bg-gray-900 w-full h-16 z-10 '>
         <textarea
