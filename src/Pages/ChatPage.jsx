@@ -32,7 +32,8 @@ const ChatPage = () => {
   method: 'GET', // atau POST tergantung request
   headers: {
     'Content-Type': 'application/json',
-    'API_KEY': API_KEY,// menaruh API_KEY di header
+    'API_KEY': 'ktsktsrylfktiydketkssto5838255022vswibu'
+    },// menaruh API_KEY di header
   }
 })
           const data = await response.json();
