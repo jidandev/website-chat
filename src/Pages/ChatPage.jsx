@@ -6,8 +6,6 @@ import Button from '../components/Elements/Button';
 const MAX_MESSAGE_LENGTH = 500; // Maksimal panjang pesan
 
 const socket = io('https://violet-grass-drug.glitch.me/');
-const apikey = "ktsktsrylfktiydketkssto5838255022vswibu";
-
 const ChatPage = () => {
   const navigate = useNavigate();
   const [message, setMessage] = useState('');
@@ -22,7 +20,7 @@ const ChatPage = () => {
   localStorage.setItem('password', '');
 
   const token = localStorage.getItem('token'); // Mengambil token dari localStorage
-
+  const apikey = "ktsktsrylfktiydketkssto5838255022vswibu";
   const [admins, setAdmins] = useState([]);
 
   useEffect(() => {
