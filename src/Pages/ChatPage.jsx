@@ -20,26 +20,26 @@ const ChatPage = () => {
   localStorage.setItem('password', '');
 
   const token = localStorage.getItem('token'); // Mengambil token dari localStorage
-  const apikey = "ktsktsrylfktiydketkssto5838255022vswibu";
-  const [admins, setAdmins] = useState([]);
+  const apikey = 'ktsktsrylfktiydketkssto5838255022vswibu';
+const [admins, setAdmins] = useState([]);
 
-  useEffect(() => {
-    const fetchAdmins = async () => {
-      try {
-        const response = await axios.get('https://violet-grass-drug.glitch.me/api/admins', {
-          headers: {
-            API_KEY: apikey, // Menyertakan token dalam header
-          },
-        });
-          const data = await response.json();
-        setAdmins(data[0].list);
-      } catch (error) {
-        console.error('Error fetching admins:', error);
-      }
-    };
+useEffect(() => {
+  const fetchAdmins = async () => {
+    try {
+      const response = await axios.get('https://violet-grass-drug.glitch.me/api/admins', {
+        headers: {
+          Authorization: apikey, // Menyertakan token dalam header
+        },
+      });
+      setAdmins(response.data[0].list); // Perbaikan di sini
+    } catch (error) {
+      console.error('Error fetching admins:', error);
+    }
+  };
 
-    fetchAdmins();
-  }, []);
+  fetchAdmins();
+}, []);
+
 
   useEffect(() => {
     const fetchUserData = async () => {
