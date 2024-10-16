@@ -6,6 +6,7 @@ import Button from '../components/Elements/Button';
 const MAX_MESSAGE_LENGTH = 500; // Maksimal panjang pesan
 
 const socket = io('https://violet-grass-drug.glitch.me/');
+const API_KEY = "ktsktsrylfktiydketkssto5838255022vswibu";
 
 const ChatPage = () => {
   const navigate = useNavigate();
@@ -27,8 +28,14 @@ const ChatPage = () => {
   useEffect(() => {
     const fetchAdmins = async () => {
       try {
-        const response = await fetch('https://violet-grass-drug.glitch.me/api/admins'); // Ganti dengan URL server kamu jika diperlukan
-        const data = await response.json();
+        fetch('https://backend-url.com/your-endpoint', {
+  method: 'GET', // atau POST tergantung request
+  headers: {
+    'Content-Type': 'application/json',
+    'API_KEY': API_KEY,// menaruh API_KEY di header
+  }
+})
+          const data = await response.json();
         setAdmins(data[0].list);
       } catch (error) {
         console.error('Error fetching admins:', error);
