@@ -6,7 +6,7 @@ import Button from '../components/Elements/Button';
 const MAX_MESSAGE_LENGTH = 500; // Maksimal panjang pesan
 
 const socket = io('https://violet-grass-drug.glitch.me/');
-const API_KEY = "ktsktsrylfktiydketkssto5838255022vswibu";
+const apikey = "ktsktsrylfktiydketkssto5838255022vswibu";
 
 const ChatPage = () => {
   const navigate = useNavigate();
@@ -28,14 +28,11 @@ const ChatPage = () => {
   useEffect(() => {
     const fetchAdmins = async () => {
       try {
-        fetch('https://violet-grass-drug.glitch.me/api/admins', {
-  method: 'GET', // atau POST tergantung request
-  headers: {
-    'Content-Type': 'application/json',
-    'API_KEY': 'ktsktsrylfktiydketkssto5838255022vswibu'
-    },// menaruh API_KEY di header
-  }
-})
+        const response = await axios.get('https://violet-grass-drug.glitch.me/api/admins', {
+          headers: {
+            API_KEY: apikey, // Menyertakan token dalam header
+          },
+        });
           const data = await response.json();
         setAdmins(data[0].list);
       } catch (error) {
