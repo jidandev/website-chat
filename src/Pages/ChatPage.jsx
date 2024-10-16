@@ -28,7 +28,7 @@ const ChatPage = () => {
   useEffect(() => {
     const fetchAdmins = async () => {
       try {
-        fetch('https://backend-url.com/your-endpoint', {
+        fetch('https://violet-grass-drug.glitch.me/api/admins', {
   method: 'GET', // atau POST tergantung request
   headers: {
     'Content-Type': 'application/json',
