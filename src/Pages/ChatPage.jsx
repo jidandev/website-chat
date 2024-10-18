@@ -248,7 +248,7 @@ const ChatPage = () => {
       <div className='flex fixed bottom-0 items-center justify-center bg-gray-900 w-full h-16 z-10 '>
       <button className='mr-2 overflow-hidden relative rounded-full bg-blue-600 w-9 h-9 md:w-10 md:h-10 ml-2 text-white text-xl px-[0.5rem] md:px-[0.7rem] py-[0.4rem] md:py-2' src='/vite.svg'>
       <ion-icon name="folder"></ion-icon>
-      <input type="file" className='w-full h-full absolute left-0 top-0 opacity-0' onChange={(e) => setSelectedImage(e.target.files[0])}/>
+      <input type="file" className='w-full h-full absolute left-0 top-0 opacity-0 cursor-pointer' onChange={(e) => setSelectedImage(e.target.files[0])}/>
         </button>
         <div className='w-64 h-10 md:h-12 sm:w-1/2 rounded-lg relative'>
         {imgUrl && (

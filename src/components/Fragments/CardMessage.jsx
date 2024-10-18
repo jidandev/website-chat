@@ -17,7 +17,7 @@ const Header = ({msgUser, username, admins = [],handleDelete, id}) => {
     return (
         <div className='flex mt-2'>
             <h1 className={` font-medium  ${msgUser == username ? "text-blue-600" : "text-slate-200"} text-md md:font-bold md:text-xl`}>{msgUser} {admins.includes(msgUser) ? <span className=' text-blue-600'><ion-icon name="checkmark-circle"></ion-icon></span>: ""}</h1>
-            {msgUser == username && <h1 className='mt-1' onClick={() => handleDelete(id)}><ion-icon name="trash"></ion-icon></h1>}
+            {msgUser == username && <h1 className='mt-1 cursor-pointer' onClick={() => handleDelete(id)}><ion-icon name="trash"></ion-icon></h1>}
                     
         </div>
     )
