@@ -3,6 +3,7 @@ import io from 'socket.io-client';
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
 import CardMessage from '../components/Fragments/CardMessage';
+import InputBar from '../components/Fragments/InputBar';
 const MAX_MESSAGE_LENGTH = 500; // Maksimal panjang pesan
 
 const socket = io('https://violet-grass-drug.glitch.me/');
@@ -17,7 +18,8 @@ const ChatPage = () => {
   const [loadPage, setLoadPage] = useState(false);
   const [userSend, setUserSend] = useState("");
   const [admins, setAdmins] = useState([]);
-  const [imgUrl, setImgUrl] = useState(null)
+  const [imgUrl, setImgUrl] = useState(null);
+  const [imgProfile, setImgProfile] = useState('/vite.svg')
   //variabel
   const token = localStorage.getItem('token'); 
   const apikey = 'ktsktsrylfktiydketkssto5838255022vswibu';
@@ -50,7 +52,6 @@ const ChatPage = () => {
     } catch (error) {
       console.error('Error deleting item:', error);
     }
-    console.log(id)
   };
 
   //GET USER DATA
@@ -63,6 +64,7 @@ const ChatPage = () => {
           },
         });
         setUsername(response.data.username);
+        setImgProfile(response.data.image);
       } catch (error) {
         console.error('Error fetching user data', error);
       }
@@ -86,8 +88,8 @@ const ChatPage = () => {
 
         // Jika token tidak valid, arahkan ke login
         if (!response.data.valid) {
-          console.log(localStorage.getItem('token'))
-          console.log(response.data)
+          // console.log(localStorage.getItem('token'))
+          // console.log(response.data)
           localStorage.removeItem('token'); // Hapus token palsu
           navigate('/login');
           
@@ -122,6 +124,34 @@ const ChatPage = () => {
     };
   }, []);
 
+  //CHANGE PROFILE
+  const changeProfile = async (selectedImage) => {
+    if(selectedImage) {
+      const formData = new FormData();
+        formData.append('image', selectedImage);
+  
+        try {
+          const res = await fetch(urlApi + '/updateprofile', {
+            method: 'POST',
+            headers: {
+              Authorization: token,
+            },
+            body: formData
+          });
+    
+          const data = await res.json();
+          if(res.ok) {
+            setImgProfile(data.imageUrl);
+            console.log(data.imageUrl);
+          }
+          
+        }
+        catch(error) {
+          console.log(error);
+        }
+    }
+  }
+
   //POST MESSAGE
   const sendMessage = async () => {
     if (selectedImage) {
@@ -133,8 +163,14 @@ const ChatPage = () => {
             method: 'POST',
             body: formData
           });
+          const response = await axios.get(urlApi + '/user', {
+            headers: {
+              Authorization: token, // Menyertakan token dalam header
+            },
+          });
   
           const data = await res.json();
+      
      
           if (res.ok) {
             if(message) {
@@ -151,13 +187,14 @@ const ChatPage = () => {
               }
             }
             
-            const userMessage = { username, text: message || "", image: data.imageUrl};
+            const userMessage = { user: response.data , text: message || "", image: data.imageUrl};
           
             socket.emit('sendMessage', userMessage);
           
             setMessage('');
             setSelectedImage(null); // Clear after upload
             setImgUrl(null);
+            setUserSend(Math.random());
           } else {
             console.error('Failed to upload image:', data);
           }
@@ -166,7 +203,11 @@ const ChatPage = () => {
         }
         
       } else if ( message && !selectedImage) {
-      
+        const response = await axios.get(urlApi + '/user', {
+          headers: {
+            Authorization: token, // Menyertakan token dalam header
+          },
+        });
       if (message.length > MAX_MESSAGE_LENGTH) {
         alert("Pesan terlalu panjang!");
         return false;
@@ -178,7 +219,8 @@ const ChatPage = () => {
         alert("Pesan mengandung pengulangan karakter yang berlebihan!");
         return false;
       }
-      const userMessage = { username, text: message, image: ""};
+
+      const userMessage = { user: response.data , text: message, image: ""};
       socket.emit('sendMessage', userMessage);
       setMessage('');
       setSelectedImage(null);
@@ -193,7 +235,6 @@ const ChatPage = () => {
   useEffect(() => {
     // Mendengarkan event ketika item dihapus
     socket.on('itemDeleted', (id) => {
-      console.log(`Item with id ${id} has been deleted.`);
       // Memperbarui state untuk menghapus item yang telah dihapus
       setMessages((prevItems) => prevItems.filter(item => item._id !== id));
     });
@@ -232,46 +273,24 @@ const ChatPage = () => {
   return (
     <div className="min-h-screen flex flex-col bg-gray-900">
       <div className='flex border-b-[1px] border-b-gray-700 fixed w-full bg-gray-900 z-10'>
-      <Link onClick={() => {localStorage.removeItem('token');  localStorage.removeItem('password'); navigate('/login')}} className='text-slate-400 text-4xl mx-2 mt-1'><ion-icon name="arrow-back-outline"></ion-icon></Link>
-      <h1 className='mt-2 font-bold text-slate-200 text-xl'>{username}</h1>
+        <Link onClick={() => {localStorage.removeItem('token');  localStorage.removeItem('password'); navigate('/login')}} className='text-slate-400 text-4xl mx-2 mt-1'><ion-icon name="arrow-back-outline"></ion-icon></Link>
+        <h1 className='mt-2 font-bold text-slate-200 text-xl'>{username}</h1>
+        <button className='overflow-hidden rounded-full bg-white w-8 h-8 absolute right-0 mt-2 mr-2 md:mt-[0.35rem] md:mr-4'>
+            <img className='object-cover w-full h-full' src={imgProfile}></img>
+            <input type="file" className='w-full h-full absolute left-0 top-0 opacity-0 cursor-pointer' onChange={(e) => changeProfile(e.target.files[0])}/>
+        </button>
       </div>
       <div className="mt-12 ml-3 overflow-y-auto h-full text-white mb-16">
       {messages.map((msg, index) => (
           <CardMessage key={index}>
-            <CardMessage.Image></CardMessage.Image>
-            <CardMessage.Header msgUser={msg.username} username={username} admins={admins} handleDelete={handleDelete} id={msg._id}></CardMessage.Header>
+            <CardMessage.Image img={msg.user.image}></CardMessage.Image>
+            <CardMessage.Header msgUser={msg.user.username} username={username} admins={admins} handleDelete={handleDelete} id={msg._id}></CardMessage.Header>
             <CardMessage.Body text={msg.text} image={msg.image}></CardMessage.Body>
           </CardMessage>
         ))}
         <div ref={endMessageRef}></div>
       </div>
-      <div className='flex fixed bottom-0 items-center justify-center bg-gray-900 w-full h-16 z-10 '>
-      <button className='mr-2 overflow-hidden relative rounded-full bg-blue-600 w-9 h-9 md:w-10 md:h-10 ml-2 text-white text-xl px-[0.5rem] md:px-[0.7rem] py-[0.4rem] md:py-2' src='/vite.svg'>
-      <ion-icon name="folder"></ion-icon>
-      <input type="file" className='w-full h-full absolute left-0 top-0 opacity-0 cursor-pointer' onChange={(e) => setSelectedImage(e.target.files[0])}/>
-        </button>
-        <div className='w-64 h-10 md:h-12 sm:w-1/2 rounded-lg relative'>
-        {imgUrl && (
-          <div onClick={() => {setSelectedImage(null); setImgUrl(null);}} className='rounded group h-20 w-20 absolute left-0 -top-24 bg-black'>
-            <img alt='uploaded' src={imgUrl} className='object-cover h-full w-full absolute left-0 top-0 opacity-100 group-hover:opacity-80'></img>
-            <div className='text-white p-6 text-3xl opacity-0 group-hover:opacity-100 transition-all duration-200  w-full h-full'>
-              <ion-icon name="trash"></ion-icon>
-            </div>
-          </div>
-        )}
-        <textarea
-            type="text"
-            value={message}
-          
-            onChange={(e) => setMessage(e.target.value)}
-            className='bg-gray-700 border-0 w-full h-full rounded-lg text-white p-2'
-            placeholder="Type your message..."
-        />
-        </div>
-        <button onClick={() => {sendMessage(); }} className='rounded-full bg-blue-600 w-9 h-9 md:w-10 md:h-10 ml-2 text-white text-xl px-[0.6rem] md:px-[0.7rem] py-[0.4rem] md:py-2' src='/vite.svg'>
-          <ion-icon name="send"></ion-icon>
-        </button>
-      </div>  
+      <InputBar setSelectedImage={setSelectedImage} imgUrl={imgUrl} setImgUrl={setImgUrl} message={message} setMessage={setMessage} sendMessage={sendMessage}/>
     </div>
   );
 };

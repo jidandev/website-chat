@@ -7,9 +7,9 @@ const CardMessage = ({children}) => {
     )
 };
 
-const Image = () => {
+const Image = ({img}) => {
     return (
-        <img className='rounded-full bg-white w-8 h-8 float-left mt-0 mr-2 ' src='/vite.svg'></img>
+        <img className='rounded-full bg-white w-8 h-8 float-left mt-0 mr-2 ' src={img}></img>
     )
 }
 
@@ -18,7 +18,8 @@ const Header = ({msgUser, username, admins = [],handleDelete, id}) => {
         <div className='flex mt-2'>
             <h1 className={` font-medium  ${msgUser == username ? "text-blue-600" : "text-slate-200"} text-md md:font-bold md:text-xl`}>{msgUser} {admins.includes(msgUser) ? <span className=' text-blue-600'><ion-icon name="checkmark-circle"></ion-icon></span>: ""}</h1>
             {msgUser == username && <h1 className='mt-1 cursor-pointer' onClick={() => handleDelete(id)}><ion-icon name="trash"></ion-icon></h1>}
-                    
+            {admins.includes(username) && msgUser !== username && <h1 className='mt-1 cursor-pointer text-red-600' onClick={() => handleDelete(id)}><ion-icon name="trash"></ion-icon></h1>}
+                
         </div>
     )
 }
