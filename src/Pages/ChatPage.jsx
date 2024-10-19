@@ -129,6 +129,7 @@ const ChatPage = () => {
     if(selectedImage) {
       const formData = new FormData();
         formData.append('image', selectedImage);
+        formData.append('imageOld', imgProfile);
   
         try {
           const res = await fetch(urlApi + '/updateprofile', {
@@ -136,13 +137,13 @@ const ChatPage = () => {
             headers: {
               Authorization: token,
             },
-            body: formData
+            body: formData,
           });
     
           const data = await res.json();
           if(res.ok) {
             setImgProfile(data.imageUrl);
-            console.log(data.imageUrl);
+            //console.log(data.imageUrl);
           }
           
         }
@@ -238,9 +239,14 @@ const ChatPage = () => {
       // Memperbarui state untuk menghapus item yang telah dihapus
       setMessages((prevItems) => prevItems.filter(item => item._id !== id));
     });
+    // Menerima pesan ketika komponen terpasang
+    socket.on('messageUpdate', (messages) => {
+      setMessages(messages);
+    });
     // Cleanup saat komponen unmounted
     return () => {
       socket.off('itemDeleted');
+      socket.off('messageUpdate');
     };
   }, [socket]);
   
